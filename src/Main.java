@@ -2,14 +2,14 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void printDigits(int n) {
+    public static void printDig(int n) {
         if (n == 0) return;
-        printDigits(n / 10);
+        printDig(n / 10);
         System.out.println(n % 10);
     }
 
     public static void main(String[] args) {
-        printDigits(5481);
+        printDig(5481);
     }
 }
 
@@ -30,16 +30,16 @@ public class Main {
 }
 
 public class Main {
-    public static boolean isPrime(int n, int divisor) {
+    public static boolean Prime(int n, int divisors) {
         if (n <= 2) return (n == 2);
-        if (n % divisor == 0) return false;
-        if (divisor * divisor > n) return true;
-        return isPrime(n, divisor + 1);
+        if (n % divisors == 0) return false;
+        if (divisors * divisors > n) return true;
+        return Prime(n, divisors + 1);
     }
 
     public static void main(String[] args) {
         int num = 7;
-        System.out.println(isPrime(num, 2) ? "Prime" : "Composite");
+        System.out.println(Prime(num, 2) ? "Prime" : "Composite");
     }
 }
 
@@ -50,38 +50,38 @@ public class Main{
     }
 
     public static void main(String[] args) {
-        System.out.println("Factorial: " + factorial(5));
+        System.out.println(factorial(5));
     }
 }
 
 public class Main{
-    public static int fibonacci(int n) {
+    public static int fibonaccin(int n) {
         if (n == 0) return 0;
         if (n == 1) return 1;
-        return fibonacci(n - 1) + fibonacci(n - 2);
+        return fibonaccin(n - 1) + fibonaccin(n - 2);
     }
 
     public static void main(String[] args) {
-        System.out.println("Fibonacci: " + fibonacci(5));
+        System.out.println(fibonaccin(5));
     }
 }
 
 public class Main{
-    public static long power(int a, int n) {
+    public static long Power(int a, int n) {
         if (n == 0) return 1;
-        return a * power(a, n - 1);
+        return a * Power(a, n - 1);
     }
 
     public static void main(String[] args) {
-        System.out.println("Power: " + power(2, 10));
+        System.out.println("Power: " + Power(2, 10));
     }
 }
 
 public class Main{
-    public static void reversePrint(Scanner sc, int n) {
+    public static void reverse(Scanner sc, int n) {
         if (n == 0) return;
         int x = sc.nextInt();
-        reversePrint(sc, n - 1);
+        reverse(sc, n - 1);
         System.out.print(x + " ");
     }
 
@@ -89,32 +89,32 @@ public class Main{
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter n followed by numbers:");
         int n = sc.nextInt();
-        reversePrint(sc, n);
+        reverse(sc, n);
         sc.close();
     }
 }
 
 public class Main{
-    public static boolean isAllDigits(String s, int index) {
+    public static boolean alldigits(String s, int index) {
         if (index == s.length()) return true;
         if (!Character.isDigit(s.charAt(index))) return false;
-        return isAllDigits(s, index + 1);
+        return alldigits(s, index + 1);
     }
 
     public static void main(String[] args) {
         String s = "123456";
-        System.out.println(isAllDigits(s, 0) ? "Yes" : "No");
+        System.out.println(alldigits(s, 0) ? "Yes" : "No");
     }
 }
 
 public class Main{
-    public static int countChars(String s) {
+    public static int countChar(String s) {
         if (s.equals("")) return 0;
-        return 1 + countChars(s.substring(1));
+        return 1 + countChar(s.substring(1));
     }
 
     public static void main(String[] args) {
-        System.out.println("Length: " + countChars("hello"));
+        System.out.println("Length: " + countChar("hello"));
     }
 }
 
