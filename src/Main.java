@@ -1,130 +1,230 @@
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
+import java.util.Stack;
 
-public class Main {
+class BankAccount {
+    String accountNumber;
+    String username;
+    double balance;
 
-    public static void printDig(int n) {
-        if (n == 0) return;
-        printDig(n / 10);
-        System.out.println(n % 10);
-    }
-
-    public static void main(String[] args) {
-        printDig(5481);
-    }
-}
-
-public class Main {
-
-    public static int sum(int[] arr, int index) {
-        if (index == arr.length) return 0;
-        return arr[index] + sum(arr, index + 1);
-    }
-
-
-    public static void main(String[] args) {
-        int[] arr = {3, 2, 4, 1};
-        int total = sum(arr, 0);
-        double avg = (double) total / arr.length;
-        System.out.println(avg);
+    public BankAccount(String accountNumber, String username, double balance) {
+        this.accountNumber = accountNumber;
+        this.username = username;
+        this.balance = balance;
     }
 }
 
 public class Main {
-    public static boolean Prime(int n, int divisors) {
-        if (n <= 2) return (n == 2);
-        if (n % divisors == 0) return false;
-        if (divisors * divisors > n) return true;
-        return Prime(n, divisors + 1);
-    }
-
-    public static void main(String[] args) {
-        int num = 7;
-        System.out.println(Prime(num, 2) ? "Prime" : "Composite");
-    }
-}
-
-public class Main{
-    public static int factorial(int n) {
-        if (n == 0 || n == 1) return 1;
-        return n * factorial(n - 1);
-    }
-
-    public static void main(String[] args) {
-        System.out.println(factorial(5));
-    }
-}
-
-public class Main{
-    public static int fibonaccin(int n) {
-        if (n == 0) return 0;
-        if (n == 1) return 1;
-        return fibonaccin(n - 1) + fibonaccin(n - 2);
-    }
-
-    public static void main(String[] args) {
-        System.out.println(fibonaccin(5));
-    }
-}
-
-public class Main{
-    public static long Power(int a, int n) {
-        if (n == 0) return 1;
-        return a * Power(a, n - 1);
-    }
-
-    public static void main(String[] args) {
-        System.out.println("Power: " + Power(2, 10));
-    }
-}
-
-public class Main{
-    public static void reverse(Scanner sc, int n) {
-        if (n == 0) return;
-        int x = sc.nextInt();
-        reverse(sc, n - 1);
-        System.out.print(x + " ");
-    }
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        System.out.println("Enter n followed by numbers:");
-        int n = sc.nextInt();
-        reverse(sc, n);
+
+        LinkedList<BankAccount> accounts = new LinkedList<>();
+        Stack<String> history = new Stack<>();
+        Queue<String> billQueue = new LinkedList<>();
+        Queue<BankAccount> accountRequests = new LinkedList<>();
+
+        int mainChoice;
+
+        do {
+            System.out.println("\n1 - Enter Bank");
+            System.out.println("2 - Enter ATM");
+            System.out.println("3 - Admin Area");
+            System.out.println("4 - Exit");
+            System.out.print("Choose: ");
+            mainChoice = sc.nextInt();
+            sc.nextLine();
+
+            if (mainChoice == 1) {
+                System.out.println("\nBank Menu");
+                System.out.println("1 - Submit account opening request");
+                System.out.println("2 - Deposit money");
+                System.out.println("3 - Withdraw money");
+                System.out.println("4 - Add bill payment request");
+                System.out.print("Choose: ");
+                int bankChoice = sc.nextInt();
+                sc.nextLine();
+
+                if (bankChoice == 1) {
+                    System.out.print("Enter account number: ");
+                    String accNum = sc.nextLine();
+                    System.out.print("Enter username: ");
+                    String user = sc.nextLine();
+                    System.out.print("Enter balance: ");
+                    double bal = sc.nextDouble();
+                    sc.nextLine();
+
+                    accountRequests.add(new BankAccount(accNum, user, bal));
+                    System.out.println("Account request submitted");
+                }
+                else if (bankChoice == 2) {
+                    System.out.print("Enter username: ");
+                    String user = sc.nextLine();
+
+                    boolean found = false;
+                    for (BankAccount acc : accounts) {
+                        if (acc.username.equalsIgnoreCase(user)) {
+                            System.out.print("Enter deposit amount: ");
+                            double amount = sc.nextDouble();
+                            sc.nextLine();
+
+                            acc.balance += amount;
+                            history.push("Deposit " + amount + " to " + user);
+                            System.out.println("New balance: " + acc.balance);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        System.out.println("Account not found");
+                    }
+                }
+                else if (bankChoice == 3) {
+                    System.out.print("Enter username: ");
+                    String user = sc.nextLine();
+
+                    boolean found = false;
+                    for (BankAccount acc : accounts) {
+                        if (acc.username.equalsIgnoreCase(user)) {
+                            System.out.print("Enter withdraw amount: ");
+                            double amount = sc.nextDouble();
+                            sc.nextLine();
+
+                            if (acc.balance >= amount) {
+                                acc.balance -= amount;
+                                history.push("Withdraw " + amount + " from " + user);
+                                System.out.println("New balance: " + acc.balance);
+                            } else {
+                                System.out.println("Not enough balance");
+                            }
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        System.out.println("Account not found");
+                    }
+                }
+                else if (bankChoice == 4) {
+                    System.out.print("Enter bill name: ");
+                    String bill = sc.nextLine();
+                    billQueue.add(bill);
+                    System.out.println("Bill payment request added");
+                }
+            }
+            else if (mainChoice == 2) {
+                System.out.println("\nATM Menu");
+                System.out.println("1 - Balance enquiry");
+                System.out.println("2 - Withdraw");
+                System.out.print("Choose: ");
+                int atmChoice = sc.nextInt();
+                sc.nextLine();
+
+                if (atmChoice == 1) {
+                    System.out.print("Enter username: ");
+                    String user = sc.nextLine();
+
+                    boolean found = false;
+                    for (BankAccount acc : accounts) {
+                        if (acc.username.equalsIgnoreCase(user)) {
+                            System.out.println("Balance: " + acc.balance);
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        System.out.println("Account not found");
+                    }
+                }
+                else if (atmChoice == 2) {
+                    System.out.print("Enter username: ");
+                    String user = sc.nextLine();
+
+                    boolean found = false;
+                    for (BankAccount acc : accounts) {
+                        if (acc.username.equalsIgnoreCase(user)) {
+                            System.out.print("Enter withdraw amount: ");
+                            double amount = sc.nextDouble();
+                            sc.nextLine();
+
+                            if (acc.balance >= amount) {
+                                acc.balance -= amount;
+                                history.push("ATM Withdraw " + amount + " from " + user);
+                                System.out.println("Withdraw successful. New balance: " + acc.balance);
+                            } else {
+                                System.out.println("Not enough balance");
+                            }
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        System.out.println("Account not found");
+                    }
+                }
+            }
+            else if (mainChoice == 3) {
+                System.out.println("\nAdmin Menu");
+                System.out.println("1 - View pending account requests");
+                System.out.println("2 - Process next account request");
+                System.out.println("3 - View bill payment queue");
+                System.out.println("4 - Process next bill payment");
+                System.out.println("5 - View last transaction");
+                System.out.print("Choose: ");
+                int adminChoice = sc.nextInt();
+                sc.nextLine();
+
+                if (adminChoice == 1) {
+                    if (accountRequests.isEmpty()) {
+                        System.out.println("No pending requests");
+                    } else {
+                        for (BankAccount acc : accountRequests) {
+                            System.out.println(acc.username + " - " + acc.accountNumber);
+                        }
+                    }
+                }
+                else if (adminChoice == 2) {
+                    if (accountRequests.isEmpty()) {
+                        System.out.println("No pending requests");
+                    } else {
+                        BankAccount approved = accountRequests.poll();
+                        accounts.add(approved);
+                        System.out.println("Processed request for: " + approved.username);
+                    }
+                }
+                else if (adminChoice == 3) {
+                    if (billQueue.isEmpty()) {
+                        System.out.println("No bills in queue");
+                    } else {
+                        for (String bill : billQueue) {
+                            System.out.println(bill);
+                        }
+                    }
+                }
+                else if (adminChoice == 4) {
+                    if (billQueue.isEmpty()) {
+                        System.out.println("No bills to process");
+                    } else {
+                        System.out.println("Processing: " + billQueue.poll());
+                    }
+                }
+                else if (adminChoice == 5) {
+                    if (history.isEmpty()) {
+                        System.out.println("No transactions");
+                    } else {
+                        System.out.println("Last transaction: " + history.peek());
+                    }
+                }
+            }
+            else if (mainChoice == 4) {
+                System.out.println("Program ended");
+            }
+            else {
+                System.out.println("Invalid choice");
+            }
+
+        } while (mainChoice != 4);
+
         sc.close();
-    }
-}
-
-public class Main{
-    public static boolean alldigits(String s, int index) {
-        if (index == s.length()) return true;
-        if (!Character.isDigit(s.charAt(index))) return false;
-        return alldigits(s, index + 1);
-    }
-
-    public static void main(String[] args) {
-        String s = "123456";
-        System.out.println(alldigits(s, 0) ? "Yes" : "No");
-    }
-}
-
-public class Main{
-    public static int countChar(String s) {
-        if (s.equals("")) return 0;
-        return 1 + countChar(s.substring(1));
-    }
-
-    public static void main(String[] args) {
-        System.out.println("Length: " + countChar("hello"));
-    }
-}
-
-public class Main{
-    public static int gcd(int a, int b) {
-        if (b == 0) return a;
-        return gcd(b, a % b);
-    }
-
-    public static void main(String[] args) {
-        System.out.println("GCD: " + gcd(32, 48));
     }
 }
